@@ -6,3 +6,4 @@ firestore.rules
 package-lock.json
 package.json
 node_modules/
+.eslintrc.js
