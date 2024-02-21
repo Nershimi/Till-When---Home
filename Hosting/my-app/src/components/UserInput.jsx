@@ -60,14 +60,25 @@ export default function UserInput() {
       <section id="user-input">
         <p>
           <label>Product Type</label>
-          <input
+          {/* <input
             type="text"
             required
             value={userInput.productsType}
             onChange={(event) =>
               handleChange("productsType", event.target.value)
             }
-          />
+          /> */}
+          <select
+            required
+            value={userInput.productsType}
+            onChange={(event) =>
+              handleChange("productsType", event.target.value)
+            }
+          >
+            <option value="יבש">יבש</option>
+            <option value="קירור">קירור</option>
+            <option value="מקפיא">מקפיא</option>
+          </select>
         </p>
         <p>
           <label>Product Name</label>
