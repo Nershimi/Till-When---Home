@@ -2,9 +2,9 @@ import { useState } from "react";
 
 export default function UserInput() {
   const [userInput, setUserInput] = useState({
-    productsType: "fridge",
-    productName: "milk",
-    company: "Some company",
+    productsType: "יבש",
+    productName: "פסטה",
+    company: "שם החברה",
     expiryDate: new Date(),
   });
 
@@ -26,7 +26,6 @@ export default function UserInput() {
       if (response.ok) {
         setModalMessage("Product added successfully");
         setModalVisible(true);
-        // Optionally reset the form after successful submission
         setUserInput({
           productsType: "",
           productName: "",
