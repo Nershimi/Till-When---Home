@@ -1,44 +1,87 @@
 import { useEffect, useState } from "react";
+import TableOfProducts from "./TableOfProducts";
 
 export default function Homepage() {
-  const [products, setProducts] = useState([]);
+  const [expiredProducts, setExpiredProducts] = useState([]);
+  const [aboutToExpiredProducts, setAboutToExpiredProducts] = useState([]);
+  const [selectedExpiredProducts, setSelectedExpiredProducts] = useState([]);
+  const [selectedAboutToExpireProducts, setSelectedAboutToExpireProducts] =
+    useState([]);
 
   useEffect(() => {
     fetch(
-      "https://us-central1-products-to-trash.cloudfunctions.net/getTodayProducts"
+      "https://us-central1-products-to-trash.cloudfunctions.net/getExpiredProducts"
     )
       .then((response) => response.json())
-      .then((data) => setProducts(data))
+      .then((data) => setExpiredProducts(data))
       .catch((error) => console.error("Error fetching products: ", error));
   }, []);
 
+  useEffect(() => {
+    fetch(
+      "https://us-central1-products-to-trash.cloudfunctions.net/getProductsAboutToExpire"
+    )
+      .then((response) => response.json())
+      .then((data) => setAboutToExpiredProducts(data))
+      .catch((error) => console.error("Error fetching products: ", error));
+  }, []);
+
+  const handleDeleteProducts = (selectedProducts, isExpired) => {
+    selectedProducts.forEach((documentId) => {
+      fetch(
+        "https://us-central1-products-to-trash.cloudfunctions.net/deleteProduct",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ documentId }),
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.error("Error: ", error));
+    });
+    const updateProductsState = isExpired
+      ? expiredProducts
+      : aboutToExpiredProducts;
+    const updatedProducts = updateProductsState.filter(
+      (product) => !selectedProducts.includes(product.id)
+    );
+
+    if (isExpired) {
+      setExpiredProducts(updatedProducts);
+      setSelectedExpiredProducts([]);
+    } else {
+      setAboutToExpiredProducts(updatedProducts);
+      setSelectedAboutToExpireProducts([]);
+    }
+  };
+
   return (
     <>
-      <h1>Today trash</h1>
-      <table>
-        <thead>
-          <th>מספר</th>
-          <th>סוג מוצר</th>
-          <th>חברה</th>
-          <th>שם מוצר</th>
-          <th>תאריך תפוגה</th>
-        </thead>
-        <tbody>
-          {products.map((product, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{product.productsType}</td>
-              <td>{product.productName}</td>
-              <td>{product.company}</td>
-              <td>
-                {new Date(
-                  product.expiryDate._seconds * 1000
-                ).toLocaleDateString()}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TableOfProducts
+        title="זרוק אותי"
+        data={expiredProducts}
+        onSelectedProductsChange={setSelectedExpiredProducts}
+      />
+      <button
+        onClick={() => handleDeleteProducts(selectedExpiredProducts, true)}
+      >
+        מחק
+      </button>
+      <TableOfProducts
+        title="תציל אותי לפני שאגמר"
+        data={aboutToExpiredProducts}
+        onSelectedProductsChange={setSelectedAboutToExpireProducts}
+      />
+      <button
+        onClick={() =>
+          handleDeleteProducts(selectedAboutToExpireProducts, false)
+        }
+      >
+        מחק
+      </button>
     </>
   );
 }

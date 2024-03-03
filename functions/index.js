@@ -1,6 +1,8 @@
 const {onRequest} = require("firebase-functions/v2/https");
 const {addNewProduct} = require("./saveProduct");
-const {getTodayProducts} = require("./getListOfProducts");
+const {getExpiredProducts} = require("./getExpiredProducts");
+const {getProductsAboutToExpire} = require("./getProductsAboutToExpire");
+const {deleteProduct} = require("./deleteProduct");
 const logger = require("firebase-functions/logger");
 const helloWorld = onRequest((request, response) => {
   logger.info("Hello logs!", {structuredData: true});
@@ -10,5 +12,7 @@ const helloWorld = onRequest((request, response) => {
 module.exports = {
   addNewProduct,
   helloWorld,
-  getTodayProducts,
+  getExpiredProducts,
+  getProductsAboutToExpire,
+  deleteProduct,
 };
