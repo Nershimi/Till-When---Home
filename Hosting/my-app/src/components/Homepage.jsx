@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import TableOfProducts from "./TableOfProducts";
+import { useNavigate } from "react-router-dom";
 
 export default function Homepage() {
   const [expiredProducts, setExpiredProducts] = useState([]);
@@ -7,6 +8,7 @@ export default function Homepage() {
   const [selectedExpiredProducts, setSelectedExpiredProducts] = useState([]);
   const [selectedAboutToExpireProducts, setSelectedAboutToExpireProducts] =
     useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(
@@ -25,6 +27,13 @@ export default function Homepage() {
       .then((data) => setAboutToExpiredProducts(data))
       .catch((error) => console.error("Error fetching products: ", error));
   }, []);
+
+  const navigateToAddProduct = () => {
+    navigate("/add-products");
+  };
+  const navigateToUserDetails = () => {
+    navigate("/my-details");
+  };
 
   const handleDeleteProducts = (selectedProducts, isExpired) => {
     selectedProducts.forEach((documentId) => {
@@ -60,6 +69,10 @@ export default function Homepage() {
 
   return (
     <>
+      <div>
+        <button onClick={navigateToAddProduct}>Add Product</button>
+        <button onClick={navigateToUserDetails}>My details</button>
+      </div>
       <TableOfProducts
         title="זרוק אותי"
         data={expiredProducts}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function UserInput() {
   const [userInput, setUserInput] = useState({
@@ -10,6 +11,7 @@ export default function UserInput() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const navigate = useNavigate();
 
   async function saveProduct() {
     try {
@@ -40,6 +42,12 @@ export default function UserInput() {
       alert("Failed to add product. Please try again.");
     }
   }
+  const navigateToHomepage = () => {
+    navigate("/");
+  };
+  const navigateToUserDetails = () => {
+    navigate("/my-details");
+  };
 
   function handleChange(inputIdentifier, newValue) {
     setUserInput((prevUserInput) => {
@@ -56,6 +64,10 @@ export default function UserInput() {
 
   return (
     <>
+      <dir>
+        <button onClick={navigateToHomepage}>Home</button>
+        <button onClick={navigateToUserDetails}>My details</button>
+      </dir>
       <section id="user-input">
         <p>
           <label>Product Type</label>
