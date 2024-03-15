@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { handleSignUp } from "../../../../backend/Sing-up.js";
+import { handleSignUp } from "../../../../backend/sign-up.js";
 import { isEmailValid } from "../util/ValidateEmail.js";
 import { isPasswordValid, compareFirstAndSecondPw } from "../util/password.js";
+import { useNavigate } from "react-router-dom";
+import Input from "./Input.jsx";
+import Button from "./Button.jsx";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -10,6 +13,7 @@ export default function SignUp() {
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState();
+  const navigate = useNavigate();
 
   const emailValid = isEmailValid(email);
   const passwordValid = isPasswordValid(firstPassword);
@@ -18,66 +22,59 @@ export default function SignUp() {
     secondPassword
   );
 
-  function handleShowPass() {
-    if (!showPass) {
-      setShowPass(true);
-    } else {
-      setShowPass(false);
-    }
-  }
+  const navigateToSignIn = () => {
+    navigate("/sign-in");
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
     if (emailValid && passwordValid && isEqualPassword) {
       handleSignUp(email, firstPassword, setError);
+      navigateToSignIn();
     }
   }
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          {!emailValid && email.length > 0 && <p>This mail not Valid</p>}
-          <input
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          {!passwordValid && firstPassword.length > 0 && (
-            <p>This password not Valid</p>
-          )}
-          <input
-            type={showPass ? "text" : "password"}
-            value={firstPassword}
-            onChange={(event) => setFirstPassword(event.target.value)}
-          />
-          <button type="button" onClick={handleShowPass}>
-            Show/Hide
-          </button>
-        </div>
-        <div>
-          <label>Re-Password:</label>
-          {!isEqualPassword && <p>Password not match</p>}
-          <input
-            type={showPass ? "text" : "password"}
-            value={secondPassword}
-            onChange={(event) => setSecondPassword(event.target.value)}
-          />
-        </div>
-        <div>
-          <label>Date of birth:</label>
-          <input
-            type="date"
-            value={dateOfBirth}
-            onChange={(event) => setDateOfBirth(event.target.value)}
-          />
-        </div>
+        <Input
+          type="email"
+          label="Email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          placeholder="Enter your email"
+          error={!emailValid && email.length > 0 && "This mail not Valid"}
+        />
+        <Input
+          type={showPass ? "text" : "password"}
+          label="Password"
+          value={firstPassword}
+          onChange={(event) => setFirstPassword(event.target.value)}
+          placeholder="Enter your password"
+          error={
+            !passwordValid &&
+            firstPassword.length > 0 &&
+            "This password not Valid"
+          }
+          showVisibilityToggle
+          togglePasswordVisibility={() => setShowPass(!showPass)}
+        />
+        <Input
+          type={showPass ? "text" : "password"}
+          label="Password"
+          value={secondPassword}
+          onChange={(event) => setSecondPassword(event.target.value)}
+          placeholder="Re-enter your password"
+          error={!isEqualPassword && "Password not match"}
+        />
+        <Input
+          type="date"
+          label="Date of birth"
+          value={dateOfBirth}
+          onChange={(event) => setDateOfBirth(event.target.value)}
+        />
         {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit">Sign Up</button>
+        <Button type="submit">Sign up</Button>
       </form>
     </div>
   );
