@@ -1,40 +1,26 @@
 import logo from "../assets/Logo.webp";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "./Button.jsx";
 import "../button.css";
 import { isUserLogin } from "../../../../backend/isUserLogin.js";
 import { signOutUser } from "../../../../backend/sign-out";
 
-export default function Header() {
-  const [loggedIn, setLoggedIn] = useState(false);
+export default function Header({ loggedIn, setLoggedIn }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let unsubscribe;
-    isUserLogin()
-      .then((user) => {
-        if (user) {
-          console.log("User is logged in:", user);
-          setLoggedIn(true);
-        } else {
-          console.log("No user is logged in");
-          setLoggedIn(false);
-        }
-      })
-      .catch((error) => {
-        console.error("Error checking user state:", error);
-      })
-      .then(() => {
-        // Set up unsubscribe only after the promise is resolved
-        unsubscribe && unsubscribe();
-      });
-
-    // Return the cleanup function
-    return () => {
-      unsubscribe && unsubscribe();
+    const checkUserLogin = async () => {
+      try {
+        const user = await isUserLogin();
+        setLoggedIn(!!user); // Update loggedIn state based on user's login status
+      } catch (error) {
+        console.error("Error checking user login status:", error);
+      }
     };
-  }, []);
+
+    checkUserLogin();
+  }, [setLoggedIn]);
 
   const navigateToSignUp = () => {
     navigate("/sign-up");
@@ -45,6 +31,7 @@ export default function Header() {
 
   function handleSignOut() {
     signOutUser();
+    setLoggedIn(false); // Update loggedIn state when signing out
     navigateToSignIn();
   }
 

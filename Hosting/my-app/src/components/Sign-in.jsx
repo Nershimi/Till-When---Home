@@ -2,11 +2,12 @@ import { useState } from "react";
 import { handleSignIn } from "../../../../backend/sign-in.js";
 import { useNavigate } from "react-router-dom";
 import { handleResetPassword } from "../../../../backend/resetPassword.js";
+import { isUserLogin } from "../../../../backend/isUserLogin.js";
 import Input from "./Input.jsx";
 import Button from "./Button.jsx";
 import "../sign-in.css";
 
-export default function SignIn() {
+export default function SignIn({ setLoggedIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
@@ -26,6 +27,7 @@ export default function SignIn() {
     handleSignIn(email, password)
       .then(() => {
         navigateToHomepage();
+        setLoggedIn(true); // Update the loggedIn state
       })
       .catch(() => {
         setError("Username or password are not valid");

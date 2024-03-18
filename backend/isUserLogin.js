@@ -8,7 +8,6 @@ export const isUserLogin = () => {
     const unsubscribe = onAuthStateChanged(
       auth,
       (user) => {
-        unsubscribe(); // Unsubscribe immediately to prevent memory leaks
         if (user) {
           resolve(user); // Resolve with the user object if user is logged in
         } else {
