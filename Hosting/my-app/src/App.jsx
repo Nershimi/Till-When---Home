@@ -9,8 +9,8 @@ import SignIn from "./components/Sign-in";
 function App() {
   return (
     <>
-      <Header />
       <Router>
+        <Header />
         <Routes>
           <Route path="/" exact element={<Homepage />} />
           <Route path="/add-products" element={<UserInput />} />

@@ -5,6 +5,7 @@ import { isPasswordValid, compareFirstAndSecondPw } from "../util/password.js";
 import { useNavigate } from "react-router-dom";
 import Input from "./Input.jsx";
 import Button from "./Button.jsx";
+import "../sign-in.css";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -35,11 +36,12 @@ export default function SignUp() {
   }
 
   return (
-    <div>
+    <div className="signin-container">
+      <h1>Sign-up</h1>
       <form onSubmit={handleSubmit}>
         <Input
           type="email"
-          label="Email"
+          // label="Email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           placeholder="Enter your email"
@@ -47,7 +49,7 @@ export default function SignUp() {
         />
         <Input
           type={showPass ? "text" : "password"}
-          label="Password"
+          // label="Password"
           value={firstPassword}
           onChange={(event) => setFirstPassword(event.target.value)}
           placeholder="Enter your password"
@@ -61,7 +63,7 @@ export default function SignUp() {
         />
         <Input
           type={showPass ? "text" : "password"}
-          label="Password"
+          // label="Password"
           value={secondPassword}
           onChange={(event) => setSecondPassword(event.target.value)}
           placeholder="Re-enter your password"
@@ -69,7 +71,7 @@ export default function SignUp() {
         />
         <Input
           type="date"
-          label="Date of birth"
+          // label="Date of birth"
           value={dateOfBirth}
           onChange={(event) => setDateOfBirth(event.target.value)}
         />

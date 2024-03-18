@@ -1,5 +1,3 @@
-import Button from "./Button";
-
 export default function Input({
   type,
   label,
@@ -9,22 +7,33 @@ export default function Input({
   showVisibilityToggle,
   togglePasswordVisibility,
   error,
+  className,
 }) {
   return (
     <div>
-      {error && <p>{error}</p>}
-      <label>{label}</label>
-      <input
-        type={type}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-      />
-      {showVisibilityToggle && (
-        <Button type="button" onClick={togglePasswordVisibility}>
-          Show/Hide
-        </Button>
-      )}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <div className="input-wrapper">
+        {label && <label className="input-label">{label}</label>}
+        <input
+          type={type}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          className={`input-field ${className}`}
+        />
+        {showVisibilityToggle && (
+          <span
+            className="password-toggle-icon"
+            onClick={togglePasswordVisibility}
+          >
+            <i
+              className={
+                type === "password" ? "fas fa-eye" : "fas fa-eye-slash"
+              }
+            ></i>
+          </span>
+        )}
+      </div>
     </div>
   );
 }

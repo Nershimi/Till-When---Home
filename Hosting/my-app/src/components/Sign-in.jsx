@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { handleResetPassword } from "../../../../backend/resetPassword.js";
 import Input from "./Input.jsx";
 import Button from "./Button.jsx";
+import "../sign-in.css";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -39,31 +40,42 @@ export default function SignIn() {
   }
 
   return (
-    <div>
+    <div className="signin-container">
+      <h1>Sign-in</h1>
       <form onSubmit={handleSubmit}>
         {error && <div style={{ color: "red" }}>{error}</div>}
         <Input
+          className="input-field"
           type="email"
-          label="Email"
+          // label="Email"
           placeholder="Enter your Email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
         <Input
+          className="input-field"
           type={showPass ? "text" : "password"}
-          label="Password"
+          // label="Password"
           placeholder="Enter your password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           showVisibilityToggle
           togglePasswordVisibility={() => setShowPass(!showPass)}
         />
-        <Button type="submit">Login</Button>
-        <Button type="button" onClick={handleResetPass}>
-          Reset password
-        </Button>
-        <Button type="button" onClick={navigateToSignUp}>
-          Sign up
+        <div className="button-row">
+          <Button type="submit" className="button">
+            Login
+          </Button>
+          <Button type="button" className="button" onClick={navigateToSignUp}>
+            Sign Up
+          </Button>
+        </div>
+        <Button
+          type="button"
+          className="button reset-password"
+          onClick={handleResetPass}
+        >
+          Reset Password
         </Button>
       </form>
     </div>

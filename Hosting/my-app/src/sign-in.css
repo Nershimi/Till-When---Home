@@ -1,0 +1,133 @@
+.signin-container {
+  background-color: #ffffff;
+  width: 500px; /* Adjust the width as needed */
+  padding: 40px; /* Adjust the padding as needed */
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  margin: auto;
+  text-align: center;
+}
+
+.signin-container h1 {
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+
+.signin-container .input-wrapper {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.signin-container .input-field {
+  border: none;
+  border-bottom: 2px solid #ccc;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+  width: 100%;
+}
+
+.signin-container .input-field:focus {
+  outline: none;
+  border-bottom-color: #6c5ce7;
+}
+
+.signin-container .button {
+  background-image: linear-gradient(to right, #8e2de2, #4a00e0);
+  border: none;
+  border-radius: 20px;
+  padding: 0.75rem 1.5rem;
+  color: white;
+  font-size: 1rem;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  margin: 0.5rem 0; /* Adjust spacing around buttons */
+}
+
+.signin-container .button:hover {
+  background-image: linear-gradient(to right, #9b59b6, #8e44ad);
+}
+
+/* Button row to contain login and sign up side by side */
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem; /* Spacing below the button row */
+}
+
+/* Specific styles for the show/hide password button */
+.show-hide-password {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0.25rem 0.5rem; /* Smaller padding for a smaller button */
+  font-size: 0.75rem; /* Smaller font size */
+  background-color: #f0f0f0; /* Different background to distinguish it */
+}
+
+/* Reset password button should be full width and aligned left */
+.reset-password {
+  width: 100%;
+  text-align: left;
+}
+
+.signin-container .text-link {
+  display: block;
+  color: #333;
+  margin-top: 2rem;
+  text-decoration: none;
+}
+
+.signin-container .text-link:hover {
+  color: #6c5ce7;
+}
+
+@media (max-width: 768px) {
+  .signin-container {
+    width: 90%;
+    padding: 20px;
+  }
+}
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-field {
+  border: none;
+  border-bottom: 2px solid #ccc;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+  width: calc(100% - 40px); /* Adjust based on the show/hide button width */
+}
+
+.show-hide-btn {
+  padding: 0 8px;
+  font-size: 0.75rem; /* Smaller font size for the show/hide text */
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #6c5ce7;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  
+  .password-toggle-icon i {
+    font-size: 18px;
+    line-height: 1;
+    color: #333;
+    transition: color 0.3s ease-in-out;
+    margin-bottom: 20px;
+  }
+  
+  .password-toggle-icon i:hover {
+    color: #000;
+  }
