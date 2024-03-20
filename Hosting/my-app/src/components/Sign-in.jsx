@@ -2,7 +2,7 @@ import { useState } from "react";
 import { handleSignIn } from "../../../../backend/sign-in.js";
 import { useNavigate } from "react-router-dom";
 import { handleResetPassword } from "../../../../backend/resetPassword.js";
-import { isUserLogin } from "../../../../backend/isUserLogin.js";
+import { signInWithGoogle } from "../../../../backend/sign-inWithGoogle";
 import Input from "./Input.jsx";
 import Button from "./Button.jsx";
 import "../sign-in.css";
@@ -22,12 +22,19 @@ export default function SignIn({ setLoggedIn }) {
     navigate("/sign-up");
   };
 
+  const handleSignInWithGoogle = async () => {
+    try {
+      const user = await signInWithGoogle();
+      setLoggedIn(true);
+    } catch (error) {}
+  };
+
   function handleSubmit(e) {
     e.preventDefault();
     handleSignIn(email, password)
       .then(() => {
         navigateToHomepage();
-        setLoggedIn(true); // Update the loggedIn state
+        setLoggedIn(true);
       })
       .catch(() => {
         setError("Username or password are not valid");
@@ -42,44 +49,49 @@ export default function SignIn({ setLoggedIn }) {
   }
 
   return (
-    <div className="signin-container">
-      <h1>Sign-in</h1>
-      <form onSubmit={handleSubmit}>
-        {error && <div style={{ color: "red" }}>{error}</div>}
-        <Input
-          className="input-field"
-          type="email"
-          // label="Email"
-          placeholder="Enter your Email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-        />
-        <Input
-          className="input-field"
-          type={showPass ? "text" : "password"}
-          // label="Password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          showVisibilityToggle
-          togglePasswordVisibility={() => setShowPass(!showPass)}
-        />
-        <div className="button-row">
-          <Button type="submit" className="button">
-            Login
+    <div className="signin-wrapper">
+      <div className="signin-container">
+        <h1>Sign-in</h1>
+        <form onSubmit={handleSubmit}>
+          {error && <div style={{ color: "red" }}>{error}</div>}
+          <Input
+            className="input-field"
+            type="email"
+            // label="Email"
+            placeholder="Enter your Email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <Input
+            className="input-field"
+            type={showPass ? "text" : "password"}
+            // label="Password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            showVisibilityToggle
+            togglePasswordVisibility={() => setShowPass(!showPass)}
+          />
+          <div className="button-row">
+            <Button type="submit" className="button">
+              Login
+            </Button>
+            <Button type="button" className="button" onClick={navigateToSignUp}>
+              Sign Up
+            </Button>
+          </div>
+          <Button type="button" className="button" onClick={handleResetPass}>
+            Reset Password
           </Button>
-          <Button type="button" className="button" onClick={navigateToSignUp}>
-            Sign Up
+          <Button
+            type="button"
+            className="button"
+            onClick={handleSignInWithGoogle}
+          >
+            Google sign in
           </Button>
-        </div>
-        <Button
-          type="button"
-          className="button reset-password"
-          onClick={handleResetPass}
-        >
-          Reset Password
-        </Button>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

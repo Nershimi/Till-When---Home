@@ -1,3 +1,12 @@
+.signin-wrapper {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Use the full screen height */
+  width: 100vw; /* Use the full screen width */
+  position: relative; /* Ensure positioning context */
+}
+
 .signin-container {
   background-color: #ffffff;
   width: 500px; /* Adjust the width as needed */
@@ -6,6 +15,14 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   margin: auto;
   text-align: center;
+  position: absolute;
+  top: 15%;
+}
+@media (max-width: 768px) {
+  .signin-container {
+    width: 90%;
+    padding: 20px;
+  }
 }
 
 .signin-container h1 {
@@ -113,21 +130,41 @@
 }
 
 .password-toggle-icon {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    cursor: pointer;
-  }
-  
-  .password-toggle-icon i {
-    font-size: 18px;
-    line-height: 1;
-    color: #333;
-    transition: color 0.3s ease-in-out;
-    margin-bottom: 20px;
-  }
-  
-  .password-toggle-icon i:hover {
-    color: #000;
-  }
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.password-toggle-icon i {
+  font-size: 18px;
+  line-height: 1;
+  color: #333;
+  transition: color 0.3s ease-in-out;
+  margin-bottom: 20px;
+}
+
+.password-toggle-icon i:hover {
+  color: #000;
+}
+
+.signin-container select {
+  border: none;
+  border-bottom: 2px solid #ccc;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+  width: 100%;
+  appearance: none; /* Remove default styling */
+  -webkit-appearance: none; /* For Safari */
+  -moz-appearance: none; /* For Firefox */
+  background-image: url('data:image/svg+xml;utf8,<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>'); /* Add custom dropdown arrow */
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+.signin-container select:focus {
+  outline: none;
+  border-bottom-color: #6c5ce7;
+}
