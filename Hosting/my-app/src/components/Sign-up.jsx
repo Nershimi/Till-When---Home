@@ -8,22 +8,53 @@ import Button from "./Button.jsx";
 import "../sign-in.css";
 
 export default function SignUp() {
-  const [email, setEmail] = useState("");
-  const [firstPassword, setFirstPassword] = useState("");
+  const [newUser, setNewUser] = useState({
+    email: "",
+    password: "",
+    dateOfBirth: "",
+    fullName: "",
+    reason: "",
+  });
   const [secondPassword, setSecondPassword] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [reason, setReason] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState();
   const navigate = useNavigate();
 
-  const emailValid = isEmailValid(email);
-  const passwordValid = isPasswordValid(firstPassword);
+  const emailValid = isEmailValid(newUser.email);
+  const passwordValid = isPasswordValid(newUser.password);
   const isEqualPassword = compareFirstAndSecondPw(
-    firstPassword,
+    newUser.password,
     secondPassword
   );
+
+  async function saveUserDetails() {
+    try {
+      const response = await fetch(
+        "https://us-central1-products-to-trash.cloudfunctions.net/saveUserPersonalDetails",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        }
+      );
+      if (response.ok) {
+        setNewUser({
+          email: "",
+          password: "",
+          dateOfBirth: "",
+          fullName: "",
+          reason: "",
+        });
+      } else {
+        throw new Error("Failed to save personal user details");
+      }
+    } catch (error) {
+      console.error("Error save personal user details: ", error);
+      alert("Failed to save personal user details");
+    }
+  }
 
   const navigateToSignIn = () => {
     navigate("/sign-in");
@@ -32,7 +63,8 @@ export default function SignUp() {
   function handleSubmit(e) {
     e.preventDefault();
     if (emailValid && passwordValid && isEqualPassword) {
-      handleSignUp(email, firstPassword, setError);
+      handleSignUp(newUser, setError);
+      saveUserDetails();
       navigateToSignIn();
     }
   }
@@ -44,21 +76,31 @@ export default function SignUp() {
         <form onSubmit={handleSubmit}>
           <Input
             type="email"
-            // label="Email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            value={newUser.email}
+            onChange={(event) =>
+              setNewUser((prevUser) => ({
+                ...prevUser,
+                email: event.target.value,
+              }))
+            }
             placeholder="Enter your email"
-            error={!emailValid && email.length > 0 && "This mail not Valid"}
+            error={
+              !emailValid && newUser.email.length > 0 && "This mail not Valid"
+            }
           />
           <Input
             type={showPass ? "text" : "password"}
-            // label="Password"
-            value={firstPassword}
-            onChange={(event) => setFirstPassword(event.target.value)}
+            value={newUser.password}
+            onChange={(event) =>
+              setNewUser((prevUser) => ({
+                ...prevUser,
+                password: event.target.value,
+              }))
+            }
             placeholder="Enter your password"
             error={
               !passwordValid &&
-              firstPassword.length > 0 &&
+              newUser.password.length > 0 &&
               "This password not Valid"
             }
             showVisibilityToggle
@@ -73,32 +115,49 @@ export default function SignUp() {
           />
           <Input
             type="text"
-            value={fullName}
+            value={newUser.fullName}
             placeholder="Your full name"
-            onChange={(event) => setFullName(event.target.value)}
+            onChange={(event) =>
+              setNewUser((prevUser) => ({
+                ...prevUser,
+                fullName: event.target.value,
+              }))
+            }
           />
           <Input
             type="date"
-            value={dateOfBirth}
-            onChange={(event) => setDateOfBirth(event.target.value)}
+            value={newUser.dateOfBirth}
+            onChange={(event) =>
+              setNewUser((prevUser) => ({
+                ...prevUser,
+                dateOfBirth: event.target.value,
+              }))
+            }
           />
           <select
-            value={reason}
-            onChange={(event) => setReason(event.target.value)}
+            value={newUser.reason}
+            onChange={(event) =>
+              setNewUser((prevUser) => ({
+                ...prevUser,
+                reason: event.target.value,
+              }))
+            }
           >
             <option value="" disabled selected>
               Select reason to sign-up
             </option>
-            <option value="throwing_away">
+            <option value=" I tired of throwing away products">
               I tired of throwing away products
             </option>
-            <option value="control_products">
+            <option value=" I want to control which products I have">
               I want to control which products I have
             </option>
-            <option value="expired_products">
+            <option value="I forget to throw out expired products">
               I forget to throw out expired products
             </option>
-            <option value="recipe_offer">I want him to offer me recipes</option>
+            <option value="I want him to offer me recipes">
+              I want him to offer me recipes
+            </option>
           </select>
           {error && <p style={{ color: "red" }}>{error}</p>}
           <Button type="submit">Sign up</Button>

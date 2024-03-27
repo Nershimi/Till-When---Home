@@ -8,8 +8,8 @@ import app from "./initialApp.js"; // Import the initialized Firebase app
 const auth = getAuth(app); // Get the auth instance
 auth.useDeviceLanguage();
 
-export const handleSignUp = (email, password, setError) => {
-  createUserWithEmailAndPassword(auth, email, password)
+export const handleSignUp = (user, setError) => {
+  createUserWithEmailAndPassword(auth, user.email, user.password)
     .then((userCredential) => {
       // Signed in
       var user = userCredential.user;
@@ -20,7 +20,6 @@ export const handleSignUp = (email, password, setError) => {
       });
     })
     .catch((error) => {
-      var errorCode = error.code;
       var errorMessage = error.message;
       setError(errorMessage); // Pass the error message to the setError callback
     });
