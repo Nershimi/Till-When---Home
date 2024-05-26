@@ -35,35 +35,44 @@ export default function Homepage() {
     navigate("/my-details");
   };
 
-  const handleDeleteProducts = (selectedProducts, isExpired) => {
-    selectedProducts.forEach((documentId) => {
-      fetch(
+  const handleDeleteProducts = async (selectedProducts, isExpired) => {
+    console.log("Selected Products:", selectedProducts);
+    try {
+      const productIds = selectedProducts;
+
+      console.log("Product IDs:", productIds);
+
+      const response = await fetch(
         "https://us-central1-products-to-trash.cloudfunctions.net/deleteProduct",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ documentId }),
+          body: JSON.stringify({
+            documentsId: productIds,
+          }),
         }
-      )
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .catch((error) => console.error("Error: ", error));
-    });
-    const updateProductsState = isExpired
-      ? expiredProducts
-      : aboutToExpiredProducts;
-    const updatedProducts = updateProductsState.filter(
-      (product) => !selectedProducts.includes(product.id)
-    );
+      );
 
-    if (isExpired) {
-      setExpiredProducts(updatedProducts);
-      setSelectedExpiredProducts([]);
-    } else {
-      setAboutToExpiredProducts(updatedProducts);
-      setSelectedAboutToExpireProducts([]);
+      const responseText = await response.text();
+      console.log("Response Text:", responseText);
+
+      if (response.ok) {
+        if (isExpired) {
+          setExpiredProducts((prev) =>
+            prev.filter((product) => !productIds.includes(product.id))
+          );
+        } else {
+          setAboutToExpiredProducts((prev) =>
+            prev.filter((product) => !productIds.includes(product.id))
+          );
+        }
+      } else {
+        console.error("Failed to delete products:", responseText);
+      }
+    } catch (error) {
+      console.log("Error", error);
     }
   };
 
