@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import app from "../../../../backend/initialApp.js";
+
+const auth = getAuth(app);
 
 export default function UserInput() {
   const [userInput, setUserInput] = useState({
@@ -8,12 +12,27 @@ export default function UserInput() {
     company: "שם החברה",
     expiryDate: new Date(),
   });
+  const [email, setEmail] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setEmail(user.email);
+      } else {
+        setEmail(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
 
   async function saveProduct() {
+    console.log("User Input:", userInput); // Debugging
+    console.log("User Email:", email); // Debugging
+
     try {
       const response = await fetch(
         "https://us-central1-products-to-trash.cloudfunctions.net/addNewProduct",
@@ -22,10 +41,11 @@ export default function UserInput() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(userInput),
+          body: JSON.stringify({ productData: userInput, userEmail: email }),
         }
       );
       if (response.ok) {
+        console.log("Product added successfully");
         setModalMessage("Product added successfully");
         setModalVisible(true);
         setUserInput({
