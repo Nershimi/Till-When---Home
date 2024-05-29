@@ -13,7 +13,7 @@ export default function Header({ loggedIn, setLoggedIn }) {
     const checkUserLogin = async () => {
       try {
         const user = await isUserLogin();
-        setLoggedIn(!!user); // Update loggedIn state based on user's login status
+        setLoggedIn(!!user);
       } catch (error) {
         console.error("Error checking user login status:", error);
       }

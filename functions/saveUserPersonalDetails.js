@@ -11,12 +11,26 @@ const db = admin.firestore();
 exports.saveUserPersonalDetails = functions.https.onRequest(
   async (req, res) => {
     cors(req, res, async () => {
+      if (req.method !== "POST") {
+        res.status(400).send("Please send a POST request");
+        return;
+      }
+
       try {
         const userDetails = req.body;
+        if (
+          !userDetails.email ||
+          !userDetails.dateOfBirth ||
+          !userDetails.fullName
+        ) {
+          res.status(400).send("Missing user details");
+          return;
+        }
 
         const created = admin.firestore.FieldValue.serverTimestamp();
-        const dateOfBirth = admin.firestore.Timestamp.fromDate(new Date(userDetails.dateOfBirth));
-
+        const dateOfBirth = admin.firestore.Timestamp.fromDate(
+          new Date(userDetails.dateOfBirth)
+        );
 
         await db.collection("usersDetails").add({
           email: userDetails.email,

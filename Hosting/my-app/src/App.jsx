@@ -33,7 +33,10 @@ function App() {
           <Route path="/add-products" element={<UserInput />} />
           <Route path="/my-details" element={<UserDetails />} />
           <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/sign-in" element={<SignIn setLoggedIn={setLoggedIn} />} />
+          <Route
+            path="/sign-in"
+            element={<SignIn setLoggedIn={setLoggedIn} />}
+          />
         </Routes>
       </Router>
     </>

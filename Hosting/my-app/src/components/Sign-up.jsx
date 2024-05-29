@@ -27,6 +27,11 @@ export default function SignUp() {
     secondPassword
   );
 
+  const notEmptyFiled =
+    newUser.dateOfBirth.length > 0 &&
+    newUser.fullName.length > 0 &&
+    newUser.reason.length > 0;
+
   async function saveUserDetails() {
     try {
       const response = await fetch(
@@ -40,6 +45,7 @@ export default function SignUp() {
         }
       );
       if (response.ok) {
+        console.log(response);
         setNewUser({
           email: "",
           password: "",
@@ -62,7 +68,7 @@ export default function SignUp() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (emailValid && passwordValid && isEqualPassword) {
+    if (emailValid && passwordValid && isEqualPassword && notEmptyFiled) {
       handleSignUp(newUser, setError);
       saveUserDetails();
       navigateToSignIn();
