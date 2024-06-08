@@ -1,37 +1,21 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import app from "../../../../backend/initialApp.js";
 
-const auth = getAuth(app);
-
-export default function UserInput() {
+export default function UserInput({ userEmail }) {
   const [userInput, setUserInput] = useState({
     productsType: "יבש",
     productName: "פסטה",
     company: "שם החברה",
     expiryDate: new Date(),
   });
-  const [email, setEmail] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setEmail(user.email);
-      } else {
-        setEmail(null);
-      }
-    });
-    return () => unsubscribe();
-  }, []);
-
+  const userMail = userEmail;
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
 
   async function saveProduct() {
     console.log("User Input:", userInput); // Debugging
-    console.log("User Email:", email); // Debugging
+    console.log("User Email:", userMail); // Debugging
 
     try {
       const response = await fetch(
@@ -41,7 +25,10 @@ export default function UserInput() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ productData: userInput, userEmail: email }),
+          body: JSON.stringify({
+            productData: userInput,
+            userEmail: userMail,
+          }),
         }
       );
       if (response.ok) {

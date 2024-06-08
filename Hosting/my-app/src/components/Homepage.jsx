@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import TableOfProducts from "./TableOfProducts";
 import { useNavigate } from "react-router-dom";
 
-export default function Homepage() {
+export default function Homepage({ userEmail }) {
   const [expiredProducts, setExpiredProducts] = useState([]);
   const [aboutToExpiredProducts, setAboutToExpiredProducts] = useState([]);
   const [selectedExpiredProducts, setSelectedExpiredProducts] = useState([]);
@@ -11,19 +11,55 @@ export default function Homepage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!userEmail) return;
+    console.log("Email:", userEmail);
     fetch(
-      "https://us-central1-products-to-trash.cloudfunctions.net/getExpiredProducts"
+      "https://us-central1-products-to-trash.cloudfunctions.net/getExpiredProducts",
+      {
+        method: "POST",
+        headers: {
+          "content-Type": "application/json",
+        },
+        body: JSON.stringify({ userEmail: userEmail }),
+      }
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          // Handle non-200 responses
+          return response.text().then((text) => {
+            throw new Error(text);
+          });
+        }
+        return response.json();
+      })
       .then((data) => setExpiredProducts(data))
-      .catch((error) => console.error("Error fetching products: ", error));
-  }, []);
+      .catch((error) =>
+        console.error("Error fetching expired products: ", error)
+      );
+  }, [userEmail]);
 
   useEffect(() => {
+    if (!userEmail) return;
+    console.log("Email:", userEmail);
     fetch(
-      "https://us-central1-products-to-trash.cloudfunctions.net/getProductsAboutToExpire"
+      "https://us-central1-products-to-trash.cloudfunctions.net/getProductsAboutToExpire",
+      {
+        method: "POST",
+        headers: {
+          "content-Type": "application/json",
+        },
+        body: JSON.stringify({ userEmail: userEmail }),
+      }
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          // Handle non-200 responses
+          return response.text().then((text) => {
+            throw new Error(text);
+          });
+        }
+        return response.json();
+      })
       .then((data) => setAboutToExpiredProducts(data))
       .catch((error) => console.error("Error fetching products: ", error));
   }, []);
@@ -75,6 +111,10 @@ export default function Homepage() {
       console.log("Error", error);
     }
   };
+
+  if (!userEmail) {
+    return <logs>Loading user email...</logs>; // Handle the case when userEmail is not available yet
+  }
 
   return (
     <>

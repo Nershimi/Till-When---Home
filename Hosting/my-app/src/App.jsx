@@ -7,9 +7,27 @@ import SignUp from "./components/Sign-up";
 import SignIn from "./components/Sign-in";
 import { useState, useEffect } from "react";
 import { isUserLogin } from "../../../backend/isUserLogin.js";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import app from "../../../backend/initialApp.js";
+
+const auth = getAuth(app);
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [email, setEmail] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setEmail(user.email);
+      } else {
+        setEmail(null);
+      }
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const checkUserLogin = async () => {
@@ -24,13 +42,20 @@ function App() {
     checkUserLogin();
   }, []);
 
+  if (loading) {
+    return console.log("Loading...");
+  }
+
   return (
     <>
       <Router>
         <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
         <Routes>
-          <Route path="/" exact element={<Homepage />} />
-          <Route path="/add-products" element={<UserInput />} />
+          <Route path="/" exact element={<Homepage userEmail={email} />} />
+          <Route
+            path="/add-products"
+            element={<UserInput userEmail={email} />}
+          />
           <Route path="/my-details" element={<UserDetails />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route
