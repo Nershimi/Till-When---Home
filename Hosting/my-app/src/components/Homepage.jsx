@@ -12,7 +12,6 @@ export default function Homepage({ userEmail }) {
 
   useEffect(() => {
     if (!userEmail) return;
-    console.log("Email:", userEmail);
     fetch(
       "https://us-central1-products-to-trash.cloudfunctions.net/getExpiredProducts",
       {
@@ -40,7 +39,6 @@ export default function Homepage({ userEmail }) {
 
   useEffect(() => {
     if (!userEmail) return;
-    console.log("Email:", userEmail);
     fetch(
       "https://us-central1-products-to-trash.cloudfunctions.net/getProductsAboutToExpire",
       {
