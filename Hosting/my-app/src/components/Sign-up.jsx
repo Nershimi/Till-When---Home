@@ -18,6 +18,9 @@ export default function SignUp() {
   const [secondPassword, setSecondPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState();
+  const [hasInteractedFullName, setHasInteractedFullName] = useState(false);
+  const [hasInteractedDate, setHasInteractedDate] = useState(false);
+  const [hasInteractedReason, setHasInteractedReason] = useState(false);
   const navigate = useNavigate();
 
   const emailValid = isEmailValid(newUser.email);
@@ -69,9 +72,17 @@ export default function SignUp() {
   function handleSubmit(e) {
     e.preventDefault();
     if (emailValid && passwordValid && isEqualPassword && notEmptyFiled) {
-      handleSignUp(newUser, setError);
-      saveUserDetails();
-      navigateToSignIn();
+      handleSignUp(newUser, setError)
+        .then((user) => {
+          saveUserDetails();
+          navigateToSignIn();
+        })
+        .catch((error) => {
+          console.error("Sign up failed:", error);
+        });
+    } else {
+      setHasInteractedDate(true);
+      setHasInteractedReason(true);
     }
   }
 
@@ -123,23 +134,33 @@ export default function SignUp() {
             type="text"
             value={newUser.fullName}
             placeholder="Your full name"
-            onChange={(event) =>
+            onChange={(event) => {
               setNewUser((prevUser) => ({
                 ...prevUser,
                 fullName: event.target.value,
-              }))
+              }));
+              setHasInteractedFullName(true);
+            }}
+            error={
+              hasInteractedFullName &&
+              newUser.fullName.length <= 0 &&
+              "Missing name"
             }
           />
           <Input
             type="date"
             value={newUser.dateOfBirth}
-            onChange={(event) =>
+            onChange={(event) => {
               setNewUser((prevUser) => ({
                 ...prevUser,
                 dateOfBirth: event.target.value,
-              }))
-            }
+              }));
+            }}
+            error={hasInteractedDate && "Missing date of birth"}
           />
+          {hasInteractedReason && (
+            <p style={{ color: "red" }}>Missing reason to sign-up</p>
+          )}
           <select
             value={newUser.reason}
             onChange={(event) =>
