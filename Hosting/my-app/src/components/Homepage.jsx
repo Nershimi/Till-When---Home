@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import TableOfProducts from "./TableOfProducts";
 import { useNavigate } from "react-router-dom";
+import TableOfProducts from "./TableOfProducts.jsx";
+import Button from "./Button.jsx";
+import Dialog from "./Dialog.jsx";
 
 export default function Homepage({ userEmail }) {
   const [expiredProducts, setExpiredProducts] = useState([]);
@@ -8,7 +10,9 @@ export default function Homepage({ userEmail }) {
   const [selectedExpiredProducts, setSelectedExpiredProducts] = useState([]);
   const [selectedAboutToExpireProducts, setSelectedAboutToExpireProducts] =
     useState([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
+  const [isEndGetData, setIsEndGetData] = useState(false);
 
   useEffect(() => {
     if (!userEmail) return;
@@ -24,7 +28,6 @@ export default function Homepage({ userEmail }) {
     )
       .then((response) => {
         if (!response.ok) {
-          // Handle non-200 responses
           return response.text().then((text) => {
             throw new Error(text);
           });
@@ -59,7 +62,8 @@ export default function Homepage({ userEmail }) {
         return response.json();
       })
       .then((data) => setAboutToExpiredProducts(data))
-      .catch((error) => console.error("Error fetching products: ", error));
+      .catch((error) => console.error("Error fetching products: ", error))
+      .then(() => setIsEndGetData(true));
   }, []);
 
   const navigateToAddProduct = () => {
@@ -70,11 +74,11 @@ export default function Homepage({ userEmail }) {
   };
 
   const handleDeleteProducts = async (selectedProducts, isExpired) => {
-    console.log("Selected Products:", selectedProducts);
+    // console.log("Selected Products:", selectedProducts);
     try {
       const productIds = selectedProducts;
 
-      console.log("Product IDs:", productIds);
+      // console.log("Product IDs:", productIds);
 
       const response = await fetch(
         "https://us-central1-products-to-trash.cloudfunctions.net/deleteProduct",
@@ -110,38 +114,52 @@ export default function Homepage({ userEmail }) {
     }
   };
 
-  if (!userEmail) {
-    return <logs>Loading user email...</logs>; // Handle the case when userEmail is not available yet
-  }
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
 
   return (
     <>
+      {!userEmail && (
+        <Dialog onClose={closeDialog}>
+          You are not connected please login
+        </Dialog>
+      )}
+
       <div>
-        <button onClick={navigateToAddProduct}>Add Product</button>
-        <button onClick={navigateToUserDetails}>My details</button>
+        <Button onClick={navigateToAddProduct}>Add Product</Button>
+        <Button onClick={navigateToUserDetails}>My details</Button>
       </div>
       <TableOfProducts
         title="זרוק אותי"
         data={expiredProducts}
         onSelectedProductsChange={setSelectedExpiredProducts}
       />
-      <button
+      <Button
         onClick={() => handleDeleteProducts(selectedExpiredProducts, true)}
       >
         מחק
-      </button>
+      </Button>
       <TableOfProducts
         title="תציל אותי לפני שאגמר"
         data={aboutToExpiredProducts}
         onSelectedProductsChange={setSelectedAboutToExpireProducts}
       />
-      <button
+      <Button
         onClick={() =>
           handleDeleteProducts(selectedAboutToExpireProducts, false)
         }
       >
         מחק
-      </button>
+      </Button>
+      {/* check how to get this message after it checked */}
+      {isEndGetData &&
+        expiredProducts.length <= 0 &&
+        aboutToExpiredProducts.length <= 0 && (
+          <Dialog onClose={closeDialog}>
+            This table empty please add product
+          </Dialog>
+        )}
     </>
   );
 }
