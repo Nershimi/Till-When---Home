@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import TableOfProducts from "./TableOfProducts";
-import { useNavigate } from "react-router-dom";
+import NaviBar from "./NaviBar.jsx";
 
 export default function Homepage({ userEmail }) {
   const [expiredProducts, setExpiredProducts] = useState([]);
@@ -8,7 +8,6 @@ export default function Homepage({ userEmail }) {
   const [selectedExpiredProducts, setSelectedExpiredProducts] = useState([]);
   const [selectedAboutToExpireProducts, setSelectedAboutToExpireProducts] =
     useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!userEmail) return;
@@ -62,13 +61,6 @@ export default function Homepage({ userEmail }) {
       .catch((error) => console.error("Error fetching products: ", error));
   }, []);
 
-  const navigateToAddProduct = () => {
-    navigate("/add-products");
-  };
-  const navigateToUserDetails = () => {
-    navigate("/my-details");
-  };
-
   const handleDeleteProducts = async (selectedProducts, isExpired) => {
     console.log("Selected Products:", selectedProducts);
     try {
@@ -111,15 +103,12 @@ export default function Homepage({ userEmail }) {
   };
 
   if (!userEmail) {
-    return <logs>Loading user email...</logs>; // Handle the case when userEmail is not available yet
+    return <logs>Loading user email...</logs>;
   }
 
   return (
     <>
-      <div>
-        <button onClick={navigateToAddProduct}>Add Product</button>
-        <button onClick={navigateToUserDetails}>My details</button>
-      </div>
+      <NaviBar></NaviBar>
       <TableOfProducts
         title="זרוק אותי"
         data={expiredProducts}
