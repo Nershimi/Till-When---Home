@@ -5,6 +5,7 @@ const { getProductsAboutToExpire } = require("./getProductsAboutToExpire");
 const { deleteProduct } = require("./deleteProduct");
 const { saveUserPersonalDetails } = require("./saveUserPersonalDetails");
 const { getUserDetails } = require("./getPersonalUserDetails");
+const { updateUserPersonalDetails } = require("./updateUserPersonalDetails");
 const logger = require("firebase-functions/logger");
 const helloWorld = onRequest((request, response) => {
   logger.info("Hello logs!", { structuredData: true });
@@ -19,4 +20,5 @@ module.exports = {
   deleteProduct,
   saveUserPersonalDetails,
   getUserDetails,
+  updateUserPersonalDetails,
 };

@@ -8,6 +8,7 @@ export default function Input({
   togglePasswordVisibility,
   error,
   className,
+  readOnly
 }) {
   return (
     <div>
@@ -20,6 +21,7 @@ export default function Input({
           onChange={onChange}
           placeholder={placeholder}
           className={`input-field ${className}`}
+          readOnly={readOnly}
         />
         {showVisibilityToggle && (
           <span

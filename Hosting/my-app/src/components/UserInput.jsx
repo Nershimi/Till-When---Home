@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Button from "./Button.jsx";
 import Input from "./Input.jsx";
+import NaviBar from "./NaviBar.jsx";
 
 export default function UserInput({ userEmail }) {
   const [userInput, setUserInput] = useState({
@@ -19,7 +19,6 @@ export default function UserInput({ userEmail }) {
     company: false,
     expiryDate: false,
   });
-  const navigate = useNavigate();
 
   function checkProductValid() {
     const fields = ["productsType", "productName", "company", "expiryDate"];
@@ -80,12 +79,6 @@ export default function UserInput({ userEmail }) {
       alert("Failed to add product. Please try again.");
     }
   }
-  const navigateToHomepage = () => {
-    navigate("/");
-  };
-  const navigateToUserDetails = () => {
-    navigate("/my-details");
-  };
 
   function handleChange(inputIdentifier, newValue) {
     setUserInput((prevUserInput) => {
@@ -117,10 +110,7 @@ export default function UserInput({ userEmail }) {
 
   return (
     <>
-      <div>
-        <Button onClick={navigateToHomepage}>Home</Button>
-        <Button onClick={navigateToUserDetails}>My details</Button>
-      </div>
+      <NaviBar></NaviBar>
       <section id="user-input">
         <p>
           <label>Product Type</label>

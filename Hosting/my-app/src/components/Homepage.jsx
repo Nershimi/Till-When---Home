@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import TableOfProducts from "./TableOfProducts.jsx";
 import Button from "./Button.jsx";
 import Dialog from "./Dialog.jsx";
+=======
+import TableOfProducts from "./TableOfProducts";
+import NaviBar from "./NaviBar.jsx";
+>>>>>>> Users
 
 export default function Homepage({ userEmail }) {
   const [expiredProducts, setExpiredProducts] = useState([]);
@@ -10,9 +15,12 @@ export default function Homepage({ userEmail }) {
   const [selectedExpiredProducts, setSelectedExpiredProducts] = useState([]);
   const [selectedAboutToExpireProducts, setSelectedAboutToExpireProducts] =
     useState([]);
+<<<<<<< HEAD
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
   const [isEndGetData, setIsEndGetData] = useState(false);
+=======
+>>>>>>> Users
 
   useEffect(() => {
     if (!userEmail) return;
@@ -66,13 +74,6 @@ export default function Homepage({ userEmail }) {
       .then(() => setIsEndGetData(true));
   }, []);
 
-  const navigateToAddProduct = () => {
-    navigate("/add-products");
-  };
-  const navigateToUserDetails = () => {
-    navigate("/my-details");
-  };
-
   const handleDeleteProducts = async (selectedProducts, isExpired) => {
     // console.log("Selected Products:", selectedProducts);
     try {
@@ -114,6 +115,7 @@ export default function Homepage({ userEmail }) {
     }
   };
 
+<<<<<<< HEAD
   const closeDialog = () => {
     setIsDialogOpen(false);
   };
@@ -130,6 +132,15 @@ export default function Homepage({ userEmail }) {
         <Button onClick={navigateToAddProduct}>Add Product</Button>
         <Button onClick={navigateToUserDetails}>My details</Button>
       </div>
+=======
+  if (!userEmail) {
+    return <logs>Loading user email...</logs>;
+  }
+
+  return (
+    <>
+      <NaviBar></NaviBar>
+>>>>>>> Users
       <TableOfProducts
         title="זרוק אותי"
         data={expiredProducts}
