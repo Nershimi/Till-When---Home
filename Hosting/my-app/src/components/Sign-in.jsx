@@ -16,7 +16,7 @@ export default function SignIn({ setLoggedIn }) {
   const navigate = useNavigate();
 
   const navigateToHomepage = () => {
-    navigate("/");
+    navigate("/homepage");
   };
   const navigateToSignUp = () => {
     navigate("/sign-up");

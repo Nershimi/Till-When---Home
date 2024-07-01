@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import Header from "./components/Header";
 import Homepage from "./components/Homepage";
 import UserInput from "./components/UserInput";
@@ -51,15 +56,26 @@ function App() {
       <Router>
         <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
         <Routes>
-          <Route path="/" exact element={<Homepage userEmail={email} />} />
+          <Route
+            path="/homepage"
+            element={
+              loggedIn ? <Homepage userEmail={email} /> : <Navigate to="/" />
+            }
+          />
           <Route
             path="/add-products"
-            element={<UserInput userEmail={email} />}
+            element={
+              loggedIn ? <UserInput userEmail={email} /> : <Navigate to="/" />
+            }
           />
-          <Route path="/my-details" element={<UserDetails />} />
+          <Route
+            path="/my-details"
+            element={loggedIn ? <UserDetails /> : <Navigate to="/" />}
+          />
           <Route path="/sign-up" element={<SignUp />} />
           <Route
-            path="/sign-in"
+            path="/"
+            exact
             element={<SignIn setLoggedIn={setLoggedIn} />}
           />
         </Routes>
@@ -69,3 +85,24 @@ function App() {
 }
 
 export default App;
+
+// const PrivateRoute = ({ element: Component, ...rest }) => {
+//   return loggedIn ? <Component {...rest} /> : <Navigate to="/sign-in" />;
+// };
+
+// {
+//   /* <Route
+//             path="/homepage"
+//             element={<PrivateRoute element={Homepage} userEmail={email} />}
+//           /> */
+// }
+
+// {
+//   /* <Route
+//   path="/add-products"
+//   element={<UserInput userEmail={email} />}
+// /> */
+// }
+// {
+//   /* <Route path="/my-details" element={<UserDetails />} /> */
+// }

@@ -5,7 +5,7 @@ export default function NaviBar({}) {
   const navigate = useNavigate();
 
   const navigateToHomepage = () => {
-    navigate("/");
+    navigate("/homepage");
   };
   const navigateToAddProduct = () => {
     navigate("/add-products");

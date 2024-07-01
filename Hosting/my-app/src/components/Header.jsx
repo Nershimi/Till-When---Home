@@ -26,7 +26,7 @@ export default function Header({ loggedIn, setLoggedIn }) {
     navigate("/sign-up");
   };
   const navigateToSignIn = () => {
-    navigate("/sign-in");
+    navigate("/");
   };
 
   function handleSignOut() {
