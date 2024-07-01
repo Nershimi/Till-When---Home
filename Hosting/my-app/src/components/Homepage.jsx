@@ -68,6 +68,10 @@ export default function Homepage({ userEmail }) {
   const handleDeleteProducts = async (selectedProducts, isExpired) => {
     // console.log("Selected Products:", selectedProducts);
     try {
+      if (selectedProducts.length <= 0) {
+        console.log("This array is empty", selectedProducts);
+        return;
+      }
       const productIds = selectedProducts;
 
       // console.log("Product IDs:", productIds);
@@ -93,10 +97,12 @@ export default function Homepage({ userEmail }) {
           setExpiredProducts((prev) =>
             prev.filter((product) => !productIds.includes(product.id))
           );
+          setSelectedExpiredProducts([]);
         } else {
           setAboutToExpiredProducts((prev) =>
             prev.filter((product) => !productIds.includes(product.id))
           );
+          setSelectedAboutToExpireProducts([]);
         }
       } else {
         console.error("Failed to delete products:", responseText);
