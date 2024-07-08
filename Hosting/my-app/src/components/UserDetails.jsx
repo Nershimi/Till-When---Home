@@ -101,15 +101,6 @@ export default function UserDetails() {
     }
   }, [userToken]);
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    if (!isNaN(date)) {
-      return date.toISOString().split("T")[0];
-    }
-    return "";
-  };
-
   function handleChange(inputIdentifier, newValue) {
     setUserDetails((prevUserDetails) => {
       return {
@@ -159,7 +150,8 @@ export default function UserDetails() {
           <label>Date of Birth:</label>
           <Input
             type="date"
-            value={formatDate(userDetails.dateOfBirth)}
+            value={userDetails.dateOfBirth}
+            placeholder={userDetails.dateOfBirth}
             onChange={(event) =>
               handleChange("dateOfBirth", event.target.value)
             }
